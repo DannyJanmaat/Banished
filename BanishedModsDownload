@@ -1,0 +1,44 @@
+Clear-Host
+
+[System.Net.ServicePointManager]::SecurityProtocol = 3072
+$ProgressPreference = 'SilentlyContinue'
+
+
+$Uri = "https://banishedinfo.com/mods/browse"
+$Uri = "https://banishedinfo.com/mods/ajax?action=mods&start=0&count=10000&section=&sort=downloads"
+$Content = (iwr $Uri -ContentType 'application/json' -UseB).Content | ConvertFrom-Json
+$Result=@();$Content | % {
+   $Url = $_.url
+   $ModId = $_.mod_id
+   $Object = New-Object PSCustomObject
+   $Object | Add-Member 'Page' "https://banishedinfo.com/mods/view/$Url"
+   $Object | Add-Member 'ModId' $ModId
+   $Result += $Object
+}
+
+$TotalResult = $Result.Count
+
+
+$Output=@()
+$Counter=0
+  ForEach ( $R in $Result ) {
+    $Counter++
+    $ModId = $R.ModId
+    $P = $R.Page
+    Write-Host "$Counter/$TotalResult - $P"
+    $GetContent = Try { (iwr $R.page -UseB).Links.href } Catch {Break}
+      ForEach ( $Link in $GetContent ) {
+        If ( $Link -Match "/mods/download/$ModId" ) {
+          $Link = $Link -Replace '/mods/download/',''
+          $Object = New-Object PSCustomObject
+          $Page = "https://banishedinfo.com/mods/file/$Link"
+          $Object | Add-Member 'Page' $Page
+          $Output += $Object
+          Write-Host " - $Page"
+        }
+      }
+  }
+
+
+$Output = $Output.Page | Select -Unique
+$Output | Out-File ".\BanishedMods.txt"
