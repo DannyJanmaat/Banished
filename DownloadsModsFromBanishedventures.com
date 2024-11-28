@@ -1,7 +1,7 @@
   Begin {
-    Clear-Host
-    [System.Net.ServicePointManager]::SecurityProtocol = 3072
-    $ProgressPreference = 'SilentlyContinue'
+    $Output=@()
+    $Content = (iwr "https://www.banishedventures.com/mods/" -UseB).Content
+    $Links = (iwr "https://www.banishedventures.com/mods/" -UseB).Links.href
 
       Function CatchString{
         [CmdLetBinding()]
@@ -21,10 +21,6 @@
           $FS = "";$SS = "";$C = "";$R = ""
         }
       }
-
-    $Content = (iwr "https://www.banishedventures.com/mods/" -UseB).Content
-    $Links = (iwr "https://www.banishedventures.com/mods/" -UseB).Links.href
-    $Output=@()
   }
 
   Process {
@@ -41,5 +37,7 @@
   }
 
   End {
-    $Output | Sort Name | Out-File ".\Result_DownloadsModsFromBanishedventures.com.txt"
+    $Export = ".\Result_DownloadsModsFromBanishedventures.com.txt"
+    $Output | Sort Name | Out-File $Export
+    $Output | Select Link | Out-File $Export -Append
   }
