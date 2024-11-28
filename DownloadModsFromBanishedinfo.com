@@ -62,5 +62,5 @@
 
   End {
     $Output = $Output.Page | Select -Unique
-    $Output | Out-File ".\BanishedMods.txt"
+    $Output | Out-File ".\Result_DownloadModsFromBanishedinfo.com.txt"
   }
