@@ -2,9 +2,6 @@
     Clear-Host
     [System.Net.ServicePointManager]::SecurityProtocol = 3072
     $ProgressPreference = 'SilentlyContinue'
-    $Output=@()
-    $Content = (iwr "https://www.banishedventures.com/mods/" -UseB).Content
-    $Links = (iwr "https://www.banishedventures.com/mods/" -UseB).Links.href
 
       Function CatchString{
         [CmdLetBinding()]
@@ -24,6 +21,10 @@
           $FS = "";$SS = "";$C = "";$R = ""
         }
       }
+
+    $Content = (iwr "https://www.banishedventures.com/mods/" -UseB).Content
+    $Links = (iwr "https://www.banishedventures.com/mods/" -UseB).Links.href
+    $Output=@()
   }
 
   Process {
