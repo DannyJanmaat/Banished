@@ -37,5 +37,5 @@
   }
 
   End {
-    $Output | Sort Name | FT * -AutoSize
+    $Output | Sort Name | Out-File ".\Export_DownloadsModsFromBanishedventures.com.txt"
   }
