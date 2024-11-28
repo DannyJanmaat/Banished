@@ -41,5 +41,5 @@
   }
 
   End {
-    $Output | Sort Name | Out-File ".\Export_DownloadsModsFromBanishedventures.com.txt"
+    $Output | Sort Name | Out-File ".\Result_DownloadsModsFromBanishedventures.com.txt"
   }
